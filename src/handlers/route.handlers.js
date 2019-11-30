@@ -1,10 +1,13 @@
+const express = require("express");
 const DefaultRouter = require("../routers/default.router");
 const ProductsRouter = require("../routers/products.router");
 const UsersRouter = require("../routers/users.router");
 
+const routes = { ...DefaultRouter, ...ProductsRouter, ...UsersRouter };
+const apiRoutes = express.Router();
+
 class RouteHandlers {
   static getHandler(route, method) {
-    const routes = { ...DefaultRouter, ...ProductsRouter, ...UsersRouter };
     const routeToProceed = routes[route];
 
     if (!routeToProceed) {
@@ -13,6 +16,7 @@ class RouteHandlers {
       return routeToProceed[method] || routeToProceed.default;
     }
   }
+  
   static getBaseRoute(route) {
     const baseRouteEndPoint = route.indexOf("/", 1);
 
@@ -34,7 +38,7 @@ class RouteHandlers {
         : route.slice(baseRouteEndPoint + 1);
     }
   }
-}
 
+}
 
 module.exports = RouteHandlers;
